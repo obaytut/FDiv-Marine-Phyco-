@@ -1,0 +1,34 @@
+ANFIS
+
+e = load('C:\Users\Lenovo\Documents\eeko1.txt'); 
+t = load('C:\Users\Lenovo\Documents\teko1.txt'); 
+c = load('C:\Users\Lenovo\Documents\ceko2.txt'); 
+x = e (:,1:end-1); 
+y = e (:,end)    ; 
+
+
+xx = t (:,1:end-1); 
+yy = t (:,end)    ; 
+
+
+epoch_n = 3;       
+fismat = genfis2(x, y,0.9); 
+FIS = anfis([x y],fismat,epoch_n);
+
+oae = evalfis(x,FIS);
+D = abs(y - oae).^2;
+MSEE = sum(D)/numel(oae);
+
+oat = evalfis(xx,FIS);
+D = abs(yy - oat).^2;
+MSET = sum(D)/numel(oat);
+oac = evalfis(c,FIS);
+clc;
+
+subplot(311),plot(y,'b.');hold on;plot(oae,'r*');title('eğitim verileri');
+subplot(312),plot(yy,'b.');hold on;plot(oat,'r*');title('test verileri');
+subplot(313),plot(oac,'bo');title('check verileri');
+
+fprintf('eğitim hatası = %6.5f \ntest hatası = %6.5f \n',MSEE,MSET);
+clear D epoch_n FIS fismat x y xx yy MSEE MSET 
+
