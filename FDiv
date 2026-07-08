@@ -1,0 +1,20 @@
+FD=read.delim2("C:/Users/Lenovo/Documents/FD/TipCode/MD/MD6-AE3/REFMAKS0013t.txt", header = TRUE)
+
+library(ecospace)
+
+nchar <- 15
+char.state <- c(7,7,5,2,4,3,2,2,3,3,5,2,2,7,8)  
+char.type <- c("numeric", "ord.num","numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", 
+               "numeric", "numeric", "numeric", "ord.num", "numeric") 
+char.names <- c("PC Optimas","Biomass","Physiological Properties", "Redfield Ratios", "Cellwall Structure", "Plastids", "Reproduction", 
+                "K-R Selections", "Life Strategies", "Trophic Properties", "Predation Avoidance", "Size", "Habitat", "Abundance", "Morphologic Properties") 
+state.names <- c("Sdo","Top","Pho","Slo","Dop","Nop","Pop","Bim","N2","Buo","Pyr","Mus","Lav","Npo","Nso","Sic","Cal","Cel","Nad","fyc","clc","clb","Gwr","Res","N/T","NxT","C","S","R","Mix","aut","het","Mot","Pox","HAB","Col","Chn","Lar","Sml","Pel","Thy","Abn","GA2","GA3","Com","Sim","SVR","Biv","ESD","DSI")
+ecospace <- create_ecospace(nchar, char.state, char.type, char.names, state.names, constraint=Inf, weight.file= REFMAKS0013t.txt) 
+ecospace
+seq <- seq(nchar)
+prod(sapply(seq, function(seq) length(ecospace[[seq]]$allowed.combos)))
+x <- neutral(Sseed=5, Smax=57, ecospace=ecospace) #en bol beş türü ya da en biyomaslı 5 türü ilk satırlara yükle bakalım
+head(x, 10)
+sample <- neutral(Sseed=5, Smax=57, ecospace=ecospace) 
+REFMAKS0013t <- calc_metrics(samples=x, Smax=57, Model="Neutral", Param="NA", increm=FALSE)
+REFMAKS0013t
